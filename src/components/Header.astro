@@ -1,0 +1,63 @@
+---
+const navLinks = [
+    { href: "/", text: "ホーム" },
+    { href: "/schedule", text: "スケジュール" },
+    { href: "/results", text: "結果" },
+    { href: "/news", text: "ニュース" },
+    { href: "/about", text: "RSOPとは" },
+];
+---
+<header class="bg-white text-gray-900 shadow-lg border-b border-gray-200">
+    <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+        <div class="logo">
+            <a href="/">
+                <img src="/images/rsop_logo.jpg" alt="RSOP - Ryukyu Series of Poker" class="h-12 w-auto" />
+            </a>
+        </div>
+        <ul class="flex space-x-6">
+            {navLinks.map(link => (
+                <li><a href={link.href} class="hover:text-yellow-600 transition-colors font-medium">{link.text}</a></li>
+            ))}
+        </ul>
+    </nav>
+</header>
+
+<style>
+    .logo img {
+        transition: transform 0.2s ease;
+    }
+    
+    .logo img:hover {
+        transform: scale(1.05);
+    }
+    
+    /* レスポンシブ対応 */
+    @media (max-width: 768px) {
+        .logo img {
+            height: 2.5rem; /* h-10 equivalent */
+        }
+        
+        nav {
+            flex-wrap: wrap;
+        }
+        
+        ul {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        ul li a {
+            font-size: 0.9rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .logo img {
+            height: 2rem; /* h-8 equivalent */
+        }
+        
+        ul {
+            display: none; /* ハンバーガーメニューが必要な場合は後で実装 */
+        }
+    }
+</style>

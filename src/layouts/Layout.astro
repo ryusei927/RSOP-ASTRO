@@ -1,0 +1,36 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Ryukyu Series of Poker (RSOP) - 沖縄最大のポーカートーナメント" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title} | RSOP - Ryukyu Series of Poker</title>
+		
+		<!-- Twitter Widget Script -->
+		<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+	</head>
+	<body class="bg-white text-gray-900 font-sans">
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>
+<style is:global>
+	/* 必要に応じてグローバルスタイルを追加 */
+</style>

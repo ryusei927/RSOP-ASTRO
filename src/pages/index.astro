@@ -1,0 +1,258 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Schedule from '../components/schedule.astro';
+
+// isFeaturedがtrueのイベントを取得
+// 型定義を明示的に指定
+const featuredEvents = await getCollection('events', (entry: { data: { isFeatured: boolean } }) => {
+    return entry.data.isFeatured === true;
+});
+const latestNews = (await getCollection('news')).sort((a: { data: { publishDate: Date } }, b: { data: { publishDate: Date } }) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()).slice(0, 3);
+---
+
+<Layout title="ホーム">
+    <!-- PC用メインロゴセクション（スマホでは非表示） -->
+    <section class="pc-logo-hero">
+        <div class="logo-container">
+            <img src="/images/rsop_logo.png" alt="RSOP Logo" class="main-logo" />
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- イベント詳細セクション -->
+    <section class="event-detail-section">
+        <div class="event-image-container">
+            <img src="/images/rsop_img1.jpg" alt="RSOP 2025 WINTER FRONTIER" class="event-image" />
+        </div>
+    </section>
+
+    <div class="container mx-auto px-6 py-12">
+        <!-- イベントスケジュール詳細 -->
+        <Schedule />
+
+
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">最新情報</h2>
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-white border border-gray-200 rounded-lg p-6 text-center shadow-md">
+                    <blockquote class="twitter-tweet" data-media-max-width="560" data-theme="light">
+                        <p lang="zxx" dir="ltr">
+                            <a href="https://t.co/Ebxz6U1cT5">pic.twitter.com/Ebxz6U1cT5</a>
+                        </p>
+                        &mdash; RSOP ［RYUKYU SERIES OF POKER］ (@OKINAWARSOP) 
+                        <a href="https://twitter.com/OKINAWARSOP/status/1971172793938215268?ref_src=twsrc%5Etfw">September 25, 2025</a>
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">最新ニュース</h2>
+             <div class="space-y-4">
+                {latestNews.map((news: { data: { publishDate: Date; title: string; description: string } }) => (
+                    <div class="bg-white border border-gray-200 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        <p class="text-sm text-gray-500">{new Date(news.data.publishDate).toLocaleDateString('ja-JP')}</p>
+                        <h3 class="text-xl font-semibold text-gray-900">{news.data.title}</h3>
+                        <p class="text-gray-700">{news.data.description}</p>
+                    </div>
+                ))}
+            </div>
+        </section>
+    </div>
+</Layout>
+
+<style>
+    /* PC用メインロゴヒーローセクション */
+    .pc-logo-hero {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        position: relative;
+        padding: 2rem;
+    }
+    
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+        transform: translateY(-10vh);
+    }
+    
+    .main-logo {
+        max-width: 900px;
+        width: 120%;
+        height: auto;
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+        animation: logoFadeIn 1.5s ease-out 0.5s forwards;
+        filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+    }
+    
+    /* ロゴのふわっとしたアニメーション */
+    @keyframes logoFadeIn {
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    
+    /* スクロールインジケーター */
+    .scroll-indicator {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: bounce 2s infinite;
+    }
+    
+    .scroll-arrow {
+        width: 24px;
+        height: 24px;
+        border-right: 2px solid #6c757d;
+        border-bottom: 2px solid #6c757d;
+        transform: rotate(45deg);
+        opacity: 0.7;
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateX(-50%) translateY(0);
+        }
+        40% {
+            transform: translateX(-50%) translateY(-10px);
+        }
+        60% {
+            transform: translateX(-50%) translateY(-5px);
+        }
+    }
+    
+    /* イベント詳細セクション */
+    .event-detail-section {
+        background-color: #000;
+        padding: 2rem 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+    }
+    
+    .event-image-container {
+        max-width: 600px;
+        width: 100%;
+        padding: 0 2rem;
+    }
+    
+    .event-image {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        transform: translateY(50px);
+        animation: eventImageFadeIn 1s ease-out forwards;
+    }
+    
+    @keyframes eventImageFadeIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* スマホ表示時 */
+    @media (max-width: 768px) {
+        .pc-logo-hero {
+            display: none;
+        }
+        
+        .event-detail-section {
+            min-height: auto;
+            padding: 0;
+        }
+        
+        .event-image-container {
+            padding: 0;
+        }
+        
+        .event-image {
+            border-radius: 0;
+            box-shadow: none;
+            animation: none;
+            opacity: 1;
+            transform: none;
+        }
+    }
+    
+    /* PC表示時の追加スタイル */
+    @media (min-width: 769px) {
+        /* スムーズスクロールの設定 */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* IntersectionObserver用のクラス */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<script>
+    // スクロール時のアニメーション効果
+    document.addEventListener('DOMContentLoaded', function() {
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        // 観察対象の要素を追加
+        const eventImage = document.querySelector('.event-image');
+        if (eventImage) {
+            eventImage.classList.add('fade-in-up');
+            observer.observe(eventImage);
+        }
+        
+        // コンテンツセクションの要素も観察対象に追加
+        const contentSections = document.querySelectorAll('.container section');
+        contentSections.forEach(section => {
+            section.classList.add('fade-in-up');
+            observer.observe(section);
+        });
+        
+        // スクロールインジケーターのクリック処理
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        if (scrollIndicator) {
+            scrollIndicator.addEventListener('click', () => {
+                const eventSection = document.querySelector('.event-detail-section');
+                if (eventSection) {
+                    eventSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        }
+    });
+</script>
