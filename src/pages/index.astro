@@ -168,11 +168,11 @@ const latestNews = (await getCollection('news')).sort((a: { data: { publishDate:
                     
                     <div class="grid grid-cols-2 gap-4">
                         <div class="card-gold p-6 text-center animate-pulse-gentle">
-                            <div class="text-3xl font-black text-gradient-gold mb-2">500+</div>
+                            <div class="text-3xl font-black text-gradient-gold mb-2">300+</div>
                             <p class="text-gray-600 text-sm">年間参加者数</p>
                         </div>
                         <div class="card-gold p-6 text-center animate-pulse-gentle" style="animation-delay: 0.5s;">
-                            <div class="text-3xl font-black text-gradient-gold mb-2">¥10M+</div>
+                            <div class="text-3xl font-black text-gradient-gold mb-2">¥1M+</div>
                             <p class="text-gray-600 text-sm">年間総賞金</p>
                         </div>
                         <div class="card-gold p-6 text-center animate-pulse-gentle" style="animation-delay: 1s;">
@@ -210,6 +210,21 @@ const latestNews = (await getCollection('news')).sort((a: { data: { publishDate:
                         </div>
                     </div>
                 ))}
+            </div>
+        </section>
+
+        <!-- スポンサーセクション -->
+        <section class="mb-16 section-padding">
+            <h2 class="section-title text-gradient-gold">SPONSORS</h2>
+            <div class="flex justify-center">
+                <div class="max-w-4xl w-full">
+                    <img 
+                        src="/images/sponsor.png" 
+                        alt="Sponsors" 
+                        class="w-full h-auto rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                        style="max-width: 896px; height: auto;"
+                    />
+                </div>
             </div>
         </section>
     </div>
