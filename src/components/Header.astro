@@ -3,43 +3,50 @@ const navLinks = [
     { href: "/", text: "ホーム" },
     { href: "/schedule", text: "スケジュール" },
     { href: "/results", text: "結果" },
- 
+    { href: "/news", text: "ニュース" },
+    { href: "/about", text: "About" },
 ];
 ---
-<header class="bg-white text-gray-900 shadow-lg border-b border-gray-200">
-    <nav class="container mx-auto px-6 py-3 flex justify-between items-center relative">
-        <div class="logo">
-            <a href="/">
+<header class="backdrop-blur-md bg-white/95 text-gray-900 shadow-soft border-b border-gold-200">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center relative">
+        <div class="logo flex items-center space-x-3">
+            <a href="/" class="flex items-center space-x-3">
                 <img src="/images/rsop_logo.jpg" alt="RSOP - Ryukyu Series of Poker" class="h-12 w-auto" />
             </a>
         </div>
         
         <!-- デスクトップメニュー -->
-        <ul class="desktop-menu flex space-x-6">
+        <ul class="desktop-menu flex items-center space-x-8">
             {navLinks.map(link => (
-                <li><a href={link.href} class="hover:text-yellow-600 transition-colors font-medium">{link.text}</a></li>
+                <li>
+                    <a href={link.href} class="nav-link font-semibold text-gray-700 hover:text-gold-600 transition-all duration-300 relative">
+                        {link.text}
+                    </a>
+                </li>
             ))}
         </ul>
         
         <!-- ハンバーガーボタン -->
         <button 
             id="mobile-menu-button" 
-            class="mobile-menu-button md:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1"
+            class="mobile-menu-button"
             aria-label="メニューを開く"
             aria-expanded="false"
             aria-controls="mobile-menu"
         >
-            <span class="hamburger-line w-6 h-0.5 bg-gray-900 transition-all duration-300"></span>
-            <span class="hamburger-line w-6 h-0.5 bg-gray-900 transition-all duration-300"></span>
-            <span class="hamburger-line w-6 h-0.5 bg-gray-900 transition-all duration-300"></span>
+            <div class="hamburger-icon">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </div>
         </button>
         
         <!-- モバイルメニュー -->
-        <div id="mobile-menu" class="mobile-menu hidden absolute top-full left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50">
-            <ul class="py-2">
+        <div id="mobile-menu" class="mobile-menu hidden absolute top-full left-4 right-4 bg-white shadow-soft border border-gold-200 z-50 rounded-xl mt-2 animate-fadeInUp">
+            <ul class="py-4">
                 {navLinks.map(link => (
                     <li>
-                        <a href={link.href} class="mobile-menu-link block px-6 py-3 text-gray-900 hover:bg-yellow-50 hover:text-yellow-600 transition-colors font-medium border-b border-gray-100 last:border-b-0">
+                        <a href={link.href} class="mobile-nav-link block px-6 py-3 text-gray-700 hover:bg-gold-50 hover:text-gold-600 transition-all duration-200 font-semibold rounded-lg mx-2">
                             {link.text}
                         </a>
                     </li>
@@ -50,12 +57,60 @@ const navLinks = [
 </header>
 
 <style>
-    .logo img {
-        transition: transform 0.2s ease;
+    .nav-link {
+        @apply relative;
     }
     
-    .logo img:hover {
-        transform: scale(1.05);
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary-gold), var(--secondary-gold));
+        transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+        width: 100%;
+    }
+    
+    .shadow-soft {
+        box-shadow: 0 4px 20px rgba(212, 175, 55, 0.1);
+    }
+    
+    /* ハンバーガーボタンのスタイル */
+    .mobile-menu-button {
+        display: none;
+        padding: 8px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+    }
+    
+    .mobile-menu-button:hover {
+        background-color: #fffbeb;
+    }
+    
+    .hamburger-icon {
+        width: 24px;
+        height: 18px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    .hamburger-line {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: #374151;
+        transition: all 0.3s ease;
+        border-radius: 2px;
     }
     
     /* ハンバーガーメニューのアニメーション */
@@ -72,25 +127,41 @@ const navLinks = [
     }
     
     /* モバイルメニューの表示/非表示 */
+    .mobile-menu {
+        display: none;
+    }
+    
     .mobile-menu.active {
-        display: block;
+        display: block !important;
+        animation: fadeInUp 0.3s ease forwards;
+    }
+    
+    .mobile-nav-link:hover {
+        transform: translateX(4px);
     }
     
     /* レスポンシブ対応 */
     @media (min-width: 768px) {
         .desktop-menu {
-            display: flex;
+            display: flex !important;
         }
         
-        .mobile-menu-button,
+        .mobile-menu-button {
+            display: none !important;
+        }
+        
         .mobile-menu {
-            display: none;
+            display: none !important;
         }
     }
     
     @media (max-width: 767px) {
         .desktop-menu {
-            display: none;
+            display: none !important;
+        }
+        
+        .mobile-menu-button {
+            display: block !important;
         }
         
         .logo img {
@@ -106,24 +177,39 @@ const navLinks = [
         nav {
             padding: 0.75rem 1rem;
         }
+        
+        .mobile-menu {
+            left: 1rem;
+            right: 1rem;
+        }
     }
 </style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('Header script loaded'); // デバッグ用
+        
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
         
+        console.log('Mobile menu button:', mobileMenuButton); // デバッグ用
+        console.log('Mobile menu:', mobileMenu); // デバッグ用
+        
         if (mobileMenuButton && mobileMenu) {
             // ハンバーガーボタンのクリックイベント
-            mobileMenuButton.addEventListener('click', function() {
+            mobileMenuButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Hamburger button clicked'); // デバッグ用
+                
                 mobileMenuButton.classList.toggle('active');
                 mobileMenu.classList.toggle('active');
                 
                 // アクセシビリティのためのaria属性
                 const isExpanded = mobileMenu.classList.contains('active');
                 mobileMenuButton.setAttribute('aria-expanded', isExpanded.toString());
+                
+                console.log('Menu is now:', isExpanded ? 'open' : 'closed'); // デバッグ用
             });
             
             // メニューリンクをクリックした時にメニューを閉じる
@@ -155,6 +241,8 @@ const navLinks = [
                     mobileMenuButton.setAttribute('aria-expanded', 'false');
                 }
             });
+        } else {
+            console.error('Mobile menu elements not found'); // デバッグ用
         }
     });
 </script>
