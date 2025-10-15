@@ -31,10 +31,7 @@ const latestNews = (await getCollection('news')).sort((a: { data: { publishDate:
     </section>
 
     <div class="container mx-auto px-6 py-12">
-        <!-- イベントスケジュール詳細 -->
-        <Schedule />
-
-
+        <!-- X(Twitter)埋め込み動画 -->
         <section class="mb-16">
             <div class="text-center flex justify-center items-center">
                 <div class="w-full max-w-2xl" style="margin: 0 auto; display: flex; justify-content: center;">
@@ -48,6 +45,9 @@ const latestNews = (await getCollection('news')).sort((a: { data: { publishDate:
                 </div>
             </div>
         </section>
+
+        <!-- イベントスケジュール詳細 -->
+        <Schedule />
 
         <!-- ソーシャルメディアセクション -->
         <section class="mb-16 section-padding">
