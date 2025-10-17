@@ -1,0 +1,25 @@
+---
+// src/pages/about.astro
+import Base from "../layouts/BaseLayout.astro";
+import Section from "../components/Section.astro";
+---
+<Base title="連盟について｜沖縄ポーカー連盟">
+  <Section title="連盟概要" lead="一般社団法人としての基本情報。">
+    <table class="table">
+      <tbody>
+        <tr><td style="width:160px;">法人名</td><td>一般社団法人 沖縄ポーカー連盟</td></tr>
+        <tr><td>所在地</td><td>〒900-0000 沖縄県那覇市〇〇 1-2-3</td></tr>
+        <tr><td>設立</td><td>2025年10月1日</td></tr>
+        <tr><td>目的</td><td>アミューズメントポーカーの普及・啓発、健全化、教育、人材育成</td></tr>
+        <tr><td>役員</td><td>代表理事〇〇、理事〇〇 ほか</td></tr>
+      </tbody>
+    </table>
+  </Section>
+
+  <Section title="定款・各種資料">
+    <ul>
+      <li><a href="/docs/tei-kan.pdf">定款（PDF）</a></li>
+      <li><a href="/docs/guideline.pdf">加盟ガイドライン（PDF）</a></li>
+    </ul>
+  </Section>
+</Base>

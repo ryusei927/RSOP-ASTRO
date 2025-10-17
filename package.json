@@ -1,5 +1,5 @@
 {
-  "name": "rsop-astro",
+  "name": "okinawa-poker-federation",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -9,8 +9,6 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.14",
-    "astro": "^5.14.5",
-    "tailwindcss": "^4.1.14"
+    "astro": "^5.14.6"
   }
 }

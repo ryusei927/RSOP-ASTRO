@@ -1,0 +1,61 @@
+---
+// src/components/Nav.astro
+const links = [
+  { href: '/', label: 'トップ' },
+  { href: '/about', label: '連盟について' },
+  { href: '/activities', label: '活動内容' },
+  { href: '/rsop', label: 'RSOP' },
+  { href: '/news', label: 'お知らせ' },
+  { href: '/contact', label: 'お問い合わせ' }
+];
+---
+<button class="hamburger" id="hamburger" aria-label="メニューを開く">
+  <div class="hamburger-line"></div>
+  <div class="hamburger-line"></div>
+  <div class="hamburger-line"></div>
+</button>
+
+<nav class="nav" id="nav">
+  {links.map(({ href, label }) => (
+    <a href={href} aria-current={Astro.url.pathname === href ? 'page' : undefined}>{label}</a>
+  ))}
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const hamburger = document.getElementById('hamburger');
+    const nav = document.getElementById('nav');
+    
+    if (hamburger && nav) {
+      hamburger.addEventListener('click', function() {
+        hamburger.classList.toggle('active');
+        nav.classList.toggle('active');
+        
+        // アクセシビリティのためのaria-labelを更新
+        const isOpen = nav.classList.contains('active');
+        hamburger.setAttribute('aria-label', isOpen ? 'メニューを閉じる' : 'メニューを開く');
+      });
+      
+      // メニュー項目をクリックしたときにメニューを閉じる（モバイルのみ）
+      const navLinks = nav.querySelectorAll('a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          if (window.innerWidth <= 768) {
+            hamburger.classList.remove('active');
+            nav.classList.remove('active');
+            hamburger.setAttribute('aria-label', 'メニューを開く');
+          }
+        });
+      });
+      
+      // ウィンドウリサイズでメニューをリセット
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          hamburger.classList.remove('active');
+          nav.classList.remove('active');
+          hamburger.setAttribute('aria-label', 'メニューを開く');
+        }
+      });
+    }
+  });
+</script>

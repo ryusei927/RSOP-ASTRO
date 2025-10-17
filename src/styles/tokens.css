@@ -1,0 +1,11 @@
+:root{
+  --bg:#ffffff;
+  --fg:#111111;
+  --muted:#6b7280; /* gray-500 */
+  --brand:#0f172a; /* slate-900 */
+  --acc:#1e40af;   /* blue-800 */
+  --link:#1d4ed8;  /* blue-700 */
+  --border:#e5e7eb;/* gray-200 */
+  --radius:0px;    /* 角丸なし */
+  --max:1040px;
+}

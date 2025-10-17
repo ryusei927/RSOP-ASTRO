@@ -1,0 +1,11 @@
+---
+// src/components/Section.astro
+const { title, lead } = Astro.props as { title: string; lead?: string };
+---
+<section class="section">
+  <div class="container">
+    <h2>{title}</h2>
+    {lead && <p class="lead">{lead}</p>}
+    <slot />
+  </div>
+</section>

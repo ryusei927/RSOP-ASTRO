@@ -1,0 +1,64 @@
+/* src/styles/base.css */
+@import './tokens.css';
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Hiragino Kaku Gothic ProN","ヒラギノ角ゴ ProN W3","Noto Sans JP","Yu Gothic UI","メイリオ",Meiryo,sans-serif}
+img{max-width:100%;height:auto}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:var(--max);margin:0 auto;padding:0 16px}
+hr{border:0;border-top:1px solid var(--border);margin:32px 0}
+.btn{display:inline-block;border:1px solid var(--acc);padding:10px 16px;border-radius:var(--radius);font-weight:600}
+.btn:hover{background:#f8fafc}
+.section{padding:56px 0}
+.section h2{margin:0 0 12px;font-size:28px}
+.lead{color:var(--muted);line-height:1.7}
+.nav{display:flex;gap:16px;align-items:center;position:relative;z-index:10}
+.nav a{padding:12px 4px;border-bottom:2px solid transparent;position:relative;z-index:11}
+.nav a[aria-current="page"]{border-color:var(--acc)}
+
+/* ハンバーガーメニューボタン */
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px;flex-direction:column;justify-content:center;align-items:center;width:40px;height:40px}
+.hamburger-line{width:24px;height:2px;background:var(--fg);margin:2px 0;transition:all 0.3s ease;transform-origin:center}
+.hamburger.active .hamburger-line:nth-child(1){transform:rotate(45deg) translate(5px, 5px)}
+.hamburger.active .hamburger-line:nth-child(2){opacity:0}
+.hamburger.active .hamburger-line:nth-child(3){transform:rotate(-45deg) translate(7px, -6px)}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .hamburger{display:flex}
+  .nav{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border-top:1px solid var(--border);flex-direction:column;align-items:stretch;padding:16px;box-shadow:0 4px 6px rgba(0,0,0,0.1)}
+  .nav.active{display:flex}
+  .nav a{padding:16px 0;border-bottom:1px solid var(--border);text-align:center}
+  .nav a:last-child{border-bottom:none}
+  .nav a[aria-current="page"]{border-bottom:1px solid var(--acc);border-color:var(--acc)}
+  .header .container{position:relative}
+  
+  /* グリッドレイアウトのモバイル対応 */
+  .grid.two{display:flex;flex-direction:column;gap:32px}
+  .grid.two > div:first-child{order:2}
+  .grid.two > div:last-child{order:1}
+  
+  /* ヒーローセクションのモバイル対応 */
+  .section h1{font-size:28px !important;line-height:1.2 !important}
+  .container{padding:0 20px}
+  
+  /* ボタンレイアウトのモバイル対応 */
+  .btn-group{flex-direction:column;align-items:stretch}
+  .btn{text-align:center;width:100%}
+  
+  /* セクションパディングのモバイル調整 */
+  .section{padding:48px 0 !important}
+  
+  /* 画像のモバイル対応 */
+  .grid.two img{width:100%;height:auto;max-width:300px;margin:0 auto;display:block}
+}
+
+.header{border-bottom:1px solid var(--border);background:#fff;position:relative;z-index:100}
+.footer{border-top:1px solid var(--border);color:var(--muted)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.04em;color:#333;text-decoration:none;font-family:"Hiragino Kaku Gothic ProN","ヒラギノ角ゴ ProN W3","Yu Gothic","游ゴシック",YuGothic,"游ゴシック体","Noto Sans JP",sans-serif}
+.logo:hover{text-decoration:none;color:#333}
+.grid{display:grid;gap:24px}
+.grid.two{grid-template-columns:1.2fr 1fr}
+.table{border-collapse:collapse;width:100%}
+.table td{border-bottom:1px solid var(--border);padding:10px 6px;vertical-align:top}
+.list-clean{list-style:none;padding:0;margin:0}

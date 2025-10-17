@@ -1,0 +1,667 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/BaseLayout.astro";
+import Section from "../../components/Section.astro";
+import { RSOP_STOPS } from "../../data/rsop";
+
+// isFeaturedがtrueのイベントを取得（エラーハンドリング付き）
+let featuredEvents = [];
+let latestNews = [];
+
+try {
+  featuredEvents = await getCollection(
+    "events",
+    (entry: { data: { isFeatured: boolean } }) => {
+      return entry.data.isFeatured === true;
+    },
+  );
+} catch (error) {
+  console.log("Events collection not found, using empty array");
+}
+
+try {
+  const newsCollection = await getCollection("news");
+  latestNews = newsCollection
+    .sort(
+      (
+        a: { data: { publishDate: Date } },
+        b: { data: { publishDate: Date } },
+      ) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+    )
+    .slice(0, 3);
+} catch (error) {
+  console.log("News collection not found, using empty array");
+}
+---
+
+<Base
+  title="RSOP｜沖縄ポーカー連盟"
+  description="沖縄版JOPTを目指すシリーズ戦 RSOP の公式情報。"
+>
+  <!-- PC用メインロゴセクション（スマホでは非表示） -->
+  <section class="pc-logo-hero">
+    <div class="logo-container">
+      <img src="/images/rsop_logo.png" alt="RSOP Logo" class="main-logo" />
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- イベント詳細セクション -->
+  <section class="event-detail-section">
+    <div class="event-image-container">
+      <img
+        src="/images/rsop_img1.jpg"
+        alt="RSOP 2025 WINTER FRONTIER"
+        class="event-image"
+      />
+    </div>
+  </section>
+
+  <div class="container mx-auto px-6 py-12">
+    <!-- X(Twitter)埋め込み動画 -->
+    <div class="twitter-embed-container">
+      <blockquote class="twitter-tweet">
+        <p lang="zxx" dir="ltr">
+          <a href="https://t.co/Ebxz6U1cT5">pic.twitter.com/Ebxz6U1cT5</a>
+        </p>&mdash; RSOP ［RYUKYU SERIES OF POKER］ (@OKINAWARSOP) <a
+          href="https://twitter.com/OKINAWARSOP/status/1971172793938215268?ref_src=twsrc%5Etfw"
+          >September 25, 2025</a>
+      </blockquote>
+      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"
+      ></script>
+    </div>
+
+    <!-- イベント日程セクション（既存のコンテンツを統合） -->
+    <Section title="SCHEDULE">
+      <div style="text-align: center;">
+        <img
+          src="/images/rsop_img2.png"
+          alt="RSOP イベント日程"
+          style="max-width: 800px; width: 100%; height: auto; display: inline-block;"
+        />
+      </div>
+    </Section>
+
+    <!-- RSOPについてセクション -->
+    <section class="mb-16 section-padding">
+      <h2 class="section-title text-gradient-gold">ABOUT RSOP</h2>
+      <div class="max-w-4xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+          <div class="card p-8">
+            <h3 class="text-2xl font-bold mb-4 text-gradient-gold">
+              沖縄最大のポーカートーナメント
+            </h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Ryukyu Series of
+              Poker（RSOP）は、沖縄で最も規模の大きなポーカートーナメントです。
+              プロからアマチュアまで、あらゆるレベルのプレイヤーが参加し、
+              真剣勝負を繰り広げています。
+            </p>
+            <p class="text-gray-600 mb-6 leading-relaxed">
+              年○回の定期開催に加え、特別イベントも多数開催。
+              沖縄の美しい環境の中で、最高レベルのポーカーを体験できます。
+            </p>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+              <a class="btn" href="/docs/rsop-rulebook.pdf"
+                >ルールブック（PDF）</a
+              >
+              <a class="btn" href="#">エントリー（外部）</a>
+            </div>
+          </div>
+
+          <div class="stats-container">
+            <div class="stat-item">
+              <div class="stat-number">300+</div>
+              <div class="stat-label">年間参加者数</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">¥1M+</div>
+              <div class="stat-label">年間総賞金</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">○</div>
+              <div class="stat-label">年間開催回数</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">2018</div>
+              <div class="stat-label">開始年</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 最新ニュースセクション -->
+    {
+      latestNews.length > 0 && (
+        <section class="mb-16">
+          <h2 class="section-title text-gradient-gold">📰 LATEST NEWS</h2>
+          <div class="space-y-6 max-w-4xl mx-auto">
+            {latestNews.map(
+              (news: {
+                data: { publishDate: Date; title: string; description: string };
+              }) => (
+                <div class="card hover-lift p-6">
+                  <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                      <div class="w-12 h-12 bg-gradient-gold rounded-full flex items-center justify-center">
+                        <span class="text-white text-xl">📢</span>
+                      </div>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-sm text-gray-500 mb-1">
+                        {new Date(news.data.publishDate).toLocaleDateString(
+                          "ja-JP",
+                        )}
+                      </p>
+                      <h3 class="text-xl font-bold text-gray-900 mb-2">
+                        {news.data.title}
+                      </h3>
+                      <p class="text-gray-600 leading-relaxed">
+                        {news.data.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ),
+            )}
+          </div>
+        </section>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  /* PC用メインロゴヒーローセクション */
+  .pc-logo-hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    position: relative;
+    padding: 2rem;
+  }
+
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    transform: translateY(-10vh);
+  }
+
+  .main-logo {
+    max-width: 900px;
+    width: 120%;
+    height: auto;
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    animation: logoFadeIn 1.5s ease-out 0.5s forwards;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+  }
+
+  /* ロゴのふわっとしたアニメーション */
+  @keyframes logoFadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* スクロールインジケーター */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+    cursor: pointer;
+  }
+
+  .scroll-arrow {
+    width: 24px;
+    height: 24px;
+    border-right: 2px solid #6c757d;
+    border-bottom: 2px solid #6c757d;
+    transform: rotate(45deg);
+    opacity: 0.7;
+  }
+
+  @keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+      transform: translateX(-50%) translateY(0);
+    }
+    40% {
+      transform: translateX(-50%) translateY(-10px);
+    }
+    60% {
+      transform: translateX(-50%) translateY(-5px);
+    }
+  }
+
+  /* イベント詳細セクション */
+  .event-detail-section {
+    background-color: #000;
+    padding: 2rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+  }
+
+  .event-image-container {
+    max-width: 600px;
+    width: 100%;
+    padding: 0 2rem;
+  }
+
+  .event-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateY(50px);
+    animation: eventImageFadeIn 1s ease-out forwards;
+  }
+
+  @keyframes eventImageFadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* 基本的なクラス定義 */
+  .schedule-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+    padding: 0 1rem;
+  }
+
+  .schedule-image {
+    max-width: 800px;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s ease;
+  }
+
+  .schedule-image:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  @media (max-width: 768px) {
+    .schedule-image-container {
+      padding: 0 0.5rem;
+      margin: 1rem 0;
+    }
+    
+    .schedule-image {
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  .twitter-embed-container {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+
+  @media (min-width: 769px) {
+    .twitter-embed-container {
+      margin: 3rem 0;
+    }
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(45deg, #dc2626, #ef4444);
+        border-radius: 2px;
+    }    .text-gradient-gold {
+        background: linear-gradient(45deg, #dc2626, #ef4444);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }  .card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(220, 38, 38, 0.1);
+  }
+
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-8px);
+  }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #dc2626, #ef4444);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(220, 38, 38, 0.3);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(220, 38, 38, 0.4);
+    }
+    
+    .btn-outline {
+        border: 2px solid #dc2626;
+        color: #dc2626;
+        padding: 10px 22px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s ease;
+        background: transparent;
+    }
+    
+    .btn-outline:hover {
+        background: #dc2626;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+    }  /* レスポンシブ画像の基本設定 */
+  .responsive-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* 新しい統計コンテナのスタイル */
+  .stats-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .stats-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(45deg, #dc2626, #ef4444);
+  }
+  
+  .stat-item {
+    text-align: center;
+    flex: 1;
+    position: relative;
+  }
+  
+  .stat-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, rgba(220, 38, 38, 0.3), transparent);
+  }
+  
+  .stat-number {
+    font-size: 3rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, #dc2626, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+  }
+  
+  .stat-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+  }
+
+  /* 統計カードのスタイル */
+  .stat-card {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(45deg, #ffd700, #ffb300);
+  }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(255, 215, 0, 0.4);
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.15);
+    }  /* スマホ表示時 */
+  @media (max-width: 768px) {
+    .pc-logo-hero {
+      display: none;
+    }
+
+    .event-detail-section {
+      min-height: auto;
+      padding: 0;
+    }
+
+    .event-image-container {
+      padding: 0;
+    }
+
+    .event-image {
+      border-radius: 0;
+      box-shadow: none;
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+    }
+
+    .section-title::after {
+      width: 40px;
+      height: 3px;
+    }
+
+    .grid {
+      display: block;
+    }
+
+    .grid > * {
+      margin-bottom: 1rem;
+    }
+
+    /* モバイルでのカード調整 */
+    .card {
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      margin-bottom: 1rem;
+    }
+    
+    /* 新しい統計コンテナのモバイル対応 */
+    .stats-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      padding: 1.5rem;
+    }
+    
+    .stat-item:not(:last-child)::after {
+      display: none;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+    }
+    
+    .stat-label {
+      font-size: 0.75rem;
+    }
+    
+    .stat-item {
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 8px;
+      padding: 1rem;
+      border: 1px solid rgba(220, 38, 38, 0.1);
+    }
+  }    /* イベント日程画像のモバイル対応 */
+    .container img {
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      margin: 0 !important;
+      padding: 0 8px !important;
+      box-sizing: border-box !important;
+    }
+
+    /* セクション内の画像も対応 */
+    section img {
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+      padding: 0 8px !important;
+      box-sizing: border-box !important;
+    }
+
+    /* 特にイベント日程画像を大きく表示 */
+    .responsive-image {
+      padding: 0 4px !important;
+      margin: 0 !important;
+    }
+  }
+
+  /* PC表示時の追加スタイル */
+  @media (min-width: 769px) {
+    .grid {
+      display: grid;
+    }
+
+    /* スムーズスクロールの設定 */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* IntersectionObserver用のクラス */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out;
+    }
+
+    .fade-in-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script>
+  // スクロール時のアニメーション効果
+  document.addEventListener("DOMContentLoaded", function () {
+    // Intersection Observer for scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    }, observerOptions);
+
+    // 観察対象の要素を追加
+    const eventImage = document.querySelector(".event-image");
+    if (eventImage) {
+      eventImage.classList.add("fade-in-up");
+      observer.observe(eventImage);
+    }
+
+    // コンテンツセクションの要素も観察対象に追加
+    const contentSections = document.querySelectorAll(".container section");
+    contentSections.forEach((section) => {
+      section.classList.add("fade-in-up");
+      observer.observe(section);
+    });
+
+    // スクロールインジケーターのクリック処理
+    const scrollIndicator = document.querySelector(".scroll-indicator");
+    if (scrollIndicator) {
+      scrollIndicator.addEventListener("click", () => {
+        const eventSection = document.querySelector(".event-detail-section");
+        if (eventSection) {
+          eventSection.scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    }
+  });
+</script>
